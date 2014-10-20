@@ -3,19 +3,14 @@
 #include <math.h>
 
 struct vec const vec_zero = {0,0,0};
+struct vec const vec_x = VEC_X;
+struct vec const vec_y = VEC_Y;
+struct vec const vec_z = VEC_Z;
 
-struct mat const mat_ident = {
-  {1,0,0},
-  {0,1,0},
-  {0,0,1}
-};
+struct mat const mat_ident = MAT_IDENT;
 
 struct frame const frame_ident = {
-  {
-    {1,0,0},
-    {0,1,0},
-    {0,0,1}
-  },
+  MAT_IDENT,
   {0,0,0}
 };
 

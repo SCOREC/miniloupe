@@ -7,6 +7,13 @@ struct plane { struct vec n; double r; };
 struct frame { struct mat r; struct vec t; };
 
 extern struct vec const vec_zero;
+#define VEC_X {1,0,0}
+#define VEC_Y {0,1,0}
+#define VEC_Z {0,0,1}
+extern struct vec const vec_x;
+extern struct vec const vec_y;
+extern struct vec const vec_z;
+#define MAT_IDENT {VEC_X,VEC_Y,VEC_Z}
 extern struct mat const mat_ident;
 extern struct frame const frame_ident;
 extern double const pi;
