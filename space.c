@@ -19,6 +19,8 @@ struct frame const frame_ident = {
   {0,0,0}
 };
 
+double const pi = 3.14159265359;
+
 struct vec vec_add(struct vec a, struct vec b)
 {
   a.x = a.x + b.x;
@@ -203,6 +205,14 @@ struct frame frame_inv(struct frame f)
 struct vec tri_norm(struct tri t)
 {
   return vec_norm(vec_cross(vec_sub(t.b, t.a), vec_sub(t.c, t.a)));
+}
+
+struct tri frame_mul_tri(struct frame f, struct tri t)
+{
+  t.a = frame_mul_vec(f, t.a);
+  t.b = frame_mul_vec(f, t.b);
+  t.c = frame_mul_vec(f, t.c);
+  return t;
 }
 
 double plane_dist(struct plane pl, struct vec pt)
