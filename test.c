@@ -23,7 +23,7 @@ static void draw_cube(struct cam* cam)
   t[0].c = vec_new(-1, 1,1);
   t[1] = t[0];
   t[1].a = vec_new( 1, 1,1);
-  for (i = 0; i < 3; ++i) {
+  for (i = 0; i < 4; ++i) {
     g.spin = i * pi / 2;
     draw_square(cam, &g, t, c[i]);
   }
