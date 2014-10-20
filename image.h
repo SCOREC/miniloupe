@@ -50,7 +50,7 @@ void drawing_destroy(struct drawing* d);
 
 void drawing_clear(struct drawing* d, struct color c);
 
-struct vox color_vox(struct color c);
+struct pix pix_new(int x, int y);
 
 void draw_dot(struct drawing* dr, struct dot d, struct color c);
 void draw_line(struct drawing* dr, struct dline l, struct color c);

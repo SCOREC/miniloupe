@@ -27,13 +27,6 @@ static void draw_cube(struct cam* cam)
     g.spin = i * pi / 2;
     draw_square(cam, &g, t, c[i]);
   }
-#if 0
-  g.spin = 0;
-  g.tilt =   pi / 2;
-  draw_square(cam, &g, t, c);
-  g.tilt = - pi / 2;
-  draw_square(cam, &g, t, c);
-#endif
 }
 
 int main()
@@ -47,6 +40,7 @@ int main()
   cam_clear(&c, black);
   c.frm = globe_frame(&g);
   draw_cube(&c);
+  draw_text(&c.dr.im, pix_new(40,160), "BossMan", red);
   write_png("test.png", &c.dr.im);
   cam_destroy(&c);
   return 0;

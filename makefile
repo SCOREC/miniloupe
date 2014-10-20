@@ -9,7 +9,8 @@ LDLIBS += -lm
 all: test base.o charbits.o draw_text.o from_png.o image.o render.o space.o \
   globe.o
 
-test: test.o globe.o from_png.o render.o image.o space.o base.o
+test: test.o globe.o from_png.o render.o draw_text.o charbits.o image.o \
+  space.o base.o
 
 test.o: test.c image.h space.h render.h from_png.h
 base.o: base.c base.h
@@ -22,4 +23,4 @@ space.o: space.c space.h base.h
 globe.o: globe.c space.h globe.h
 
 clean:
-	rm -f *.o
+	git clean -fdx
