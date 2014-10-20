@@ -39,11 +39,12 @@ static void draw_cube(struct cam* cam)
 int main()
 {
   struct cam c;
+  struct globe g = globe_ident;
+  globe_zoom(&g, 20);
+  globe_spin(&g, -3 * pi / 8);
   cam_init(&c, 200, 200);
   cam_clear(&c, black);
-  c.frm = frame_mul_frame(
-      frame_rot(vec_new(0,1,0), - 3 * pi / 8),
-      frame_scale(20));
+  c.frm = globe_frame(&g);
   draw_cube(&c);
   write_png("test.png", &c.dr.im);
   cam_destroy(&c);
