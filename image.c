@@ -68,15 +68,6 @@ void drawing_clear(struct drawing* d, struct color c)
   image_fill(&d->im, c);
 }
 
-struct vox color_vox(struct color c)
-{
-  struct vox v;
-  v.x = c.r;
-  v.y = c.g;
-  v.z = c.b;
-  return v;
-}
-
 void draw_dot(struct drawing* dr, struct dot d, struct color c)
 {
   if (d.z <= dr->z_rows[d.p.y][d.p.x]) {
