@@ -40,8 +40,9 @@ int main()
 {
   struct cam c;
   struct globe g = globe_ident;
-  globe_zoom(&g, 20);
+  globe_zoom(&g, 40);
   globe_spin(&g, -3 * pi / 8);
+  globe_tilt(&g, pi / 9);
   cam_init(&c, 200, 200);
   cam_clear(&c, black);
   c.frm = globe_frame(&g);
