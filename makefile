@@ -5,12 +5,14 @@ GTK_CFLAGS = $(shell pkg-config --cflags gtk+-2.0)
 GTK_LIBS = $(shell pkg-config --libs gtk+-2.0)
 LDLIBS += -lm
 
-all: test base.o charbits.o draw_text.o from_png.o image.o render.o space.o \
-  globe.o
+all: test view
 
 test: test.o globe.o from_png.o render.o draw_text.o charbits.o image.o \
   space.o base.o
-	$(CC) -o $@ $^ $(PNG_LIBS) $(LDLIBS)
+	$(CC) -O3 -o $@ $^ $(PNG_LIBS) $(LDLIBS)
+
+view: view.o
+	$(CC) -o $@ $^ $(GTK_LIBS) $(LDLIBS)
 
 test.o: test.c image.h space.h render.h from_png.h
 base.o: base.c base.h
@@ -22,6 +24,8 @@ image.o: image.c image.h base.h
 render.o: render.c render.h space.h image.h base.h
 space.o: space.c space.h base.h
 globe.o: globe.c space.h globe.h
+view.o: view.c
+	$(CC) $(GTK_CFLAGS) $(CFLAGS) -c $<
 
 clean:
 	git clean -fdx
