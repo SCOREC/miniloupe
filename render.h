@@ -15,3 +15,5 @@ int cam_sees(struct cam* cam, struct vec p);
 void render_dot(struct cam* cam, struct vec p, struct color c);
 void render_line(struct cam* cam, struct line l, struct color c);
 void render_tri(struct cam* cam, struct tri t, struct color c);
+void render_text(struct cam* cam, struct vec p, const char* t,
+    struct color c);

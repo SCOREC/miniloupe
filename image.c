@@ -1,5 +1,6 @@
 #include "image.h"
 #include "base.h"
+
 #include <float.h>
 
 struct color const white = WHITE;

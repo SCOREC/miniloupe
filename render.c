@@ -142,3 +142,11 @@ void render_tri(struct cam* cam, struct tri t, struct color c)
   render_tri_tree(cam, t, c, 0);
 }
 
+void render_text(struct cam* cam, struct vec p, const char* t,
+    struct color c)
+{
+  p = frame_mul_vec(cam->frm, p);
+  if (!cam_sees(cam, p))
+    return;
+  draw_text(&cam->dr, pix_new(p.x, p.y), t, c);
+}

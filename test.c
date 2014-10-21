@@ -40,7 +40,7 @@ int main()
   cam_clear(&c, black);
   c.frm = globe_frame(&g);
   draw_cube(&c);
-  draw_text(&c.dr.im, pix_new(40,160), "BossMan", red);
+  draw_text(&c.dr, pix_new(40,160), "BossMan", red);
   write_png("test.png", &c.dr.im);
   cam_destroy(&c);
   return 0;

@@ -56,5 +56,5 @@ void draw_dot(struct drawing* dr, struct dot d, struct color c);
 void draw_line(struct drawing* dr, struct dline l, struct color c);
 void draw_tri(struct drawing* dr, struct dtri t, struct color c);
 void draw_tri_lines(struct drawing* dr, struct dtri t, struct color c);
-void draw_text(struct image* im, struct pix p,
+void draw_text(struct drawing* im, struct pix p,
     const char* s, struct color c);
