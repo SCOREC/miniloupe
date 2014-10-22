@@ -7,8 +7,8 @@ LDLIBS += -lm
 
 all: test view
 
-test: test.o globe.o from_png.o render.o draw_text.o charbits.o image.o \
-  space.o base.o
+test: test.o milo.o scene.o globe.o from_png.o render.o draw_text.o charbits.o \
+  image.o space.o base.o
 	$(CC) -O3 -o $@ $^ $(PNG_LIBS) $(LDLIBS)
 
 view: view.o
@@ -26,6 +26,8 @@ space.o: space.c space.h base.h
 globe.o: globe.c space.h globe.h
 view.o: view.c
 	$(CC) $(GTK_CFLAGS) $(CFLAGS) -c $<
+milo.o: milo.c milo.h base.h image.h space.h render.h scene.h globe.h \
+ from_png.h
 
 clean:
 	git clean -fdx

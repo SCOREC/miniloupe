@@ -1,4 +1,8 @@
+#include "image.h"
+#include "space.h"
+#include "render.h"
 #include "scene.h"
+#include "base.h"
 
 #include <string.h>
 
@@ -23,7 +27,7 @@ void scene_dot(struct scene* s, struct vec p, struct color c)
     REALLOC(s->colors[DOT], s->cap[DOT]);
   }
   s->dots[s->count[DOT]] = p;
-  s->colors[s->count[DOT]] = c;
+  s->colors[DOT][s->count[DOT]] = c;
   ++(s->count[DOT]);
 }
 
@@ -34,8 +38,8 @@ void scene_line(struct scene* s, struct line l, struct color c)
     REALLOC(s->lines, s->cap[LINE]);
     REALLOC(s->colors[LINE], s->cap[LINE]);
   }
-  s->dots[s->count[LINE]] = p;
-  s->colors[s->count[LINE]] = c;
+  s->lines[s->count[LINE]] = l;
+  s->colors[LINE][s->count[LINE]] = c;
   ++(s->count[LINE]);
 }
 
@@ -47,7 +51,7 @@ void scene_tri(struct scene* s, struct tri t, struct color c)
     REALLOC(s->colors[TRI], s->cap[TRI]);
   }
   s->tris[s->count[TRI]] = t;
-  s->colors[s->count[TRI]] = c;
+  s->colors[TRI][s->count[TRI]] = c;
   ++(s->count[TRI]);
 }
 
@@ -60,9 +64,10 @@ void scene_text(struct scene* s, struct vec p, const char* t, struct color c)
     REALLOC(s->colors[TEXT], s->cap[TEXT]);
   }
   s->text_points[s->count[TEXT]] = p;
-  ALLOC(s->texts[s->count[TEXT]], strlen(t) + 1);
+  s->texts[s->count[TEXT]] = 0;
+  REALLOC(s->texts[s->count[TEXT]], strlen(t) + 1);
   strcpy(s->texts[s->count[TEXT]], t);
-  s->colors[s->count[TEXT]] = c;
+  s->colors[TEXT][s->count[TEXT]] = c;
   ++(s->count[TEXT]);
 }
 
@@ -77,7 +82,7 @@ void scene_destroy(struct scene* s)
     FREE(s->texts[i]);
   FREE(s->texts);
   for (i = 0; i < TYPES; ++i)
-    FREE(s->colors);
+    FREE(s->colors[i]);
 }
 
 void scene_render(struct scene* s, struct cam* cam)
@@ -90,6 +95,6 @@ void scene_render(struct scene* s, struct cam* cam)
   for (i = 0; i < s->count[TRI]; ++i)
     render_tri(cam, s->tris[i], s->colors[TRI][i]);
   for (i = 0; i < s->count[TEXT]; ++i)
-    render_text(cam, s->text_points[i], s->texts[i], s->colors[TRI][i]);
+    render_text(cam, s->text_points[i], s->texts[i], s->colors[TEXT][i]);
 }
 

@@ -3,15 +3,6 @@
 
 #include <float.h>
 
-struct color const white = WHITE;
-struct color const black = {0,0,0};
-struct color const red = RED;
-struct color const green = GREEN;
-struct color const blue = BLUE;
-struct color const cyan = {0,255,255};
-struct color const magenta = {255,0,255};
-struct color const yellow = {255,255,0};
-
 void image_init(struct image* im, int w, int h)
 {
   int r;

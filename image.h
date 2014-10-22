@@ -1,18 +1,5 @@
 struct color { unsigned char r,g,b; };
 
-#define WHITE {255,255,255}
-extern struct color const white;
-extern struct color const black;
-#define RED {255,0,0}
-extern struct color const red;
-#define GREEN {0,255,0}
-extern struct color const green;
-#define BLUE {0,0,255}
-extern struct color const blue;
-extern struct color const cyan;
-extern struct color const magenta;
-extern struct color const yellow;
-
 struct image {
   int w,h;
   struct color** rows;

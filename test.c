@@ -1,47 +1,33 @@
-#include "image.h"
-#include "space.h"
-#include "render.h"
-#include "from_png.h"
-#include "globe.h"
+#include "milo.h"
 
-static void draw_square(struct cam* cam, struct globe* g,
-    struct tri t[2], struct color c)
-{
-  int i;
-  for (i = 0; i < 2; ++i)
-    render_tri(cam, frame_mul_tri(globe_frame(g), t[i]), c);
-}
+#define _XOPEN_SOURCE 500
+#include <math.h>
 
-static void draw_cube(struct cam* cam)
+static void draw_quad(milo_t m)
 {
-  struct globe g = globe_ident;
-  struct tri t[2];
-  struct color c[4] = {RED,GREEN,BLUE,WHITE};
-  int i;
-  t[0].a = vec_new(-1,-1,1);
-  t[0].b = vec_new( 1,-1,1);
-  t[0].c = vec_new(-1, 1,1);
-  t[1] = t[0];
-  t[1].a = vec_new( 1, 1,1);
-  for (i = 0; i < 4; ++i) {
-    g.spin = i * pi / 2;
-    draw_square(cam, &g, t, c[i]);
-  }
+  double green[3] = {0,1,0};
+  double a[3] = {-1,-1,1};
+  double b[3] = { 1,-1,1};
+  double c[3] = {-1, 1,1};
+  double d[3] = { 1, 1,1};
+  milo_triangle(m, a, b, c, green);
+  milo_triangle(m, b, c, d, green);
 }
 
 int main()
 {
-  struct cam c;
-  struct globe g = globe_ident;
-  globe_zoom(&g, 40);
-  globe_spin(&g, -3 * pi / 8);
-  globe_tilt(&g, pi / 9);
-  cam_init(&c, 200, 200);
-  cam_clear(&c, black);
-  c.frm = globe_frame(&g);
-  draw_cube(&c);
-  draw_text(&c.dr, pix_new(40,160), "BossMan", red);
-  write_png("test.png", &c.dr.im);
-  cam_destroy(&c);
+  double black[3] = {0,0,0};
+  double red[3] = {1,0,0};
+  double text_point[3] = {1,1,0};
+  milo_t m = milo_new(200, 200);
+  milo_zoom(m, 40);
+  milo_spin(m, -3 * M_PI / 8);
+  milo_tilt(m, M_PI / 9);
+  milo_clear(m, black);
+  draw_quad(m);
+  milo_text(m, text_point, "BossMan", red);
+  milo_render(m);
+  milo_write_png(m, "test.png");
+  milo_free(m);
   return 0;
 }
