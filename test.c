@@ -1,5 +1,6 @@
 #include "milo.h"
 
+/* the following two lines bring in M_PI */
 #define _XOPEN_SOURCE 500
 #include <math.h>
 
