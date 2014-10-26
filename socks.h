@@ -19,4 +19,3 @@ void client_destroy(struct client* c);
 void client_connect(struct client* c);
 void blocking_send(int fd, void* data, unsigned size);
 void blocking_recv(int fd, void* data, unsigned size);
-
