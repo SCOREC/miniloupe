@@ -28,6 +28,7 @@ view.o: view.c
 	$(CC) $(GTK_CFLAGS) $(CFLAGS) -c $<
 milo.o: milo.c milo.h base.h image.h space.h render.h scene.h globe.h \
  from_png.h
+socks.o: socks.c socks.h base.h
 
 clean:
 	git clean -fdx
