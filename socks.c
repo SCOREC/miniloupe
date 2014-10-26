@@ -77,6 +77,12 @@ void client_connect(struct client* c)
   EXCEPT_IF(err < 0);
 }
 
+void client_close(struct client* c)
+{
+  close(c->fd);
+  c->fd = -1;
+}
+
 void blocking_send(int fd, void* data, unsigned size)
 {
   char* p;
