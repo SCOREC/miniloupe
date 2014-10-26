@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Werror -Wfatal-errors -Wpedantic -g -O3
+CFLAGS = -Wall -Wshadow -Werror -Wfatal-errors -Wpedantic -g -O3
 PNG_CFLAGS = $(shell pkg-config --cflags libpng)
 PNG_LIBS = $(shell pkg-config --libs libpng)
 GTK_CFLAGS = $(shell pkg-config --cflags gtk+-2.0)
