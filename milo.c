@@ -6,20 +6,24 @@
 #include "scene.h"
 #include "globe.h"
 #include "from_png.h"
+#include "socks.h"
 
 struct milo {
   struct globe globe;
   struct cam camera;
   struct scene scene;
+  struct client client;
 };
 
-milo_t milo_new(int w, int h)
+milo_t milo_new(int w, int h, const char* servname, int port)
 {
   milo_t m;
   ALLOC(m);
   m->globe = globe_ident;
   cam_init(&m->camera, w, h);
   scene_init(&m->scene);
+  client_init(&m->client, servname, port);
+  client_connect(&m->client);
   return m;
 }
 
@@ -27,6 +31,8 @@ void milo_free(milo_t m)
 {
   cam_destroy(&m->camera);
   scene_destroy(&m->scene);
+  client_close(&m->client);
+  client_destroy(&m->client);
   FREE(m);
 }
 
@@ -103,4 +109,12 @@ void milo_render(milo_t m)
 void milo_write_png(milo_t m, const char* filename)
 {
   write_png(filename, &m->camera.dr.im);
+}
+
+void milo_send(milo_t m)
+{
+  struct image* im;
+  im = &m->camera.dr.im;
+  blocking_send(m->client.fd, &im->rows[0][0],
+      im->w * im->h * sizeof(struct color));
 }

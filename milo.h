@@ -7,7 +7,7 @@ extern "C" {
 
 typedef struct milo* milo_t;
 
-milo_t milo_new(int w, int h);
+milo_t milo_new(int w, int h, const char* servname, int port);
 void milo_clear(milo_t m, double* color);
 void milo_dot(milo_t m, double* point, double* color);
 void milo_line(milo_t m, double* point_a, double* point_b, double* color);
@@ -20,6 +20,7 @@ void milo_tilt(milo_t m, double radians);
 void milo_spin(milo_t m, double radians);
 void milo_render(milo_t m);
 void milo_write_png(milo_t m, const char* filename);
+void milo_send(milo_t m);
 void milo_free(milo_t m);
 
 #ifdef __cplusplus
