@@ -4,6 +4,7 @@ PNG_LIBS = $(shell pkg-config --libs libpng)
 GTK_CFLAGS = $(shell pkg-config --cflags gtk+-2.0)
 GTK_LIBS = $(shell pkg-config --libs gtk+-2.0)
 LDLIBS += -lm
+prefix ?= /you-didnt-set-prefix
 
 all: test view
 
@@ -16,6 +17,12 @@ libmilo.a: milo.o proto.o socks.o scene.o globe.o from_png.o render.o \
 
 view: view.o proto.o socks.o base.o
 	$(CC) -o $@ $^ $(GTK_LIBS) $(LDLIBS)
+
+install: milo.h libmilo.a
+	mkdir -p $(prefix)/include
+	mkdir -p $(prefix)/lib
+	cp milo.h $(prefix)/include
+	cp libmilo.a $(prefix)/lib
 
 test.o: test.c milo.h
 base.o: base.c base.h
@@ -36,3 +43,5 @@ proto.o: proto.c proto.h socks.h
 
 clean:
 	git clean -fdx
+
+.PHONY: all clean install
