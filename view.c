@@ -71,7 +71,7 @@ static gboolean released(GtkWidget* w, GdkEventButton* event, gpointer u)
   dy = event->y - old_y;
   if (state == ZOOM) {
     send_code(serv.fd, PROTO_ZOOM);
-    factor = 1.0 - dy / HEIGHT;
+    factor = 1.0 + dy / HEIGHT;
     send_double(serv.fd, factor);
     (void)dx;
   }
