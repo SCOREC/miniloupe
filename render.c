@@ -67,6 +67,7 @@ void render_dot(struct cam* cam, struct vec p, struct color c)
   p = frame_mul_vec(cam->frm, p);
   if (!cam_sees(cam, p))
     return;
+  p = vec_add(midpoint(cam), p);
   draw_dot(&cam->dr, make_dot(p), c);
 }
 
@@ -148,5 +149,6 @@ void render_text(struct cam* cam, struct vec p, const char* t,
   p = frame_mul_vec(cam->frm, p);
   if (!cam_sees(cam, p))
     return;
+  p = vec_add(midpoint(cam), p);
   draw_text(&cam->dr, pix_new(p.x, p.y), t, c);
 }
