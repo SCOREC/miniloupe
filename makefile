@@ -5,7 +5,7 @@ GTK_CFLAGS = $(shell pkg-config --cflags gtk+-2.0)
 GTK_LIBS = $(shell pkg-config --libs gtk+-2.0)
 LDLIBS += -lm
 
-all: test view server client
+all: test view
 
 test: test.o milo.o proto.o socks.o scene.o globe.o from_png.o render.o \
   draw_text.o charbits.o image.o space.o base.o
@@ -13,9 +13,6 @@ test: test.o milo.o proto.o socks.o scene.o globe.o from_png.o render.o \
 
 view: view.o proto.o socks.o base.o
 	$(CC) -o $@ $^ $(GTK_LIBS) $(LDLIBS)
-
-server: server.o socks.o base.o
-client: client.o socks.o base.o
 
 test.o: test.c milo.h
 base.o: base.c base.h
@@ -32,8 +29,6 @@ view.o: view.c socks.h
 milo.o: milo.c milo.h base.h image.h space.h render.h scene.h globe.h \
  from_png.h
 socks.o: socks.c socks.h base.h
-server.o: server.c socks.h
-client.o: client.c socks.h
 proto.o: proto.c proto.h socks.h
 
 clean:
