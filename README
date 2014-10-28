@@ -24,3 +24,6 @@ in the view program and a test image will show up.
 
 To install the programs, library, and header file, run
 	make install prefix=/path/to/install/dir/
+
+To zoom in the view GUI, click and drag up and down
+with the right mouse button.
