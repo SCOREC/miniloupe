@@ -100,7 +100,7 @@ void milo_spin(milo_t m, double radians)
   globe_spin(&m->globe, radians);
 }
 
-void milo_render(milo_t m)
+static void milo_render(milo_t m)
 {
   m->camera.frm = globe_frame(&m->globe);
   scene_render(&m->scene, &m->camera);

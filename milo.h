@@ -25,7 +25,6 @@ void milo_pan(milo_t m, double x, double y);
 void milo_spin(milo_t m, double radians);
 void milo_tilt(milo_t m, double radians);
 
-void milo_render(milo_t m);
 void milo_run(milo_t m);
 
 #ifdef __cplusplus
