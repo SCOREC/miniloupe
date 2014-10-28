@@ -18,11 +18,12 @@ struct milo {
 
 milo_t milo_new(int w, int h, const char* servname, int port)
 {
+  static struct color const black = {0,0,0};
   milo_t m;
   ALLOC(m);
   m->globe = globe_ident;
   cam_init(&m->camera, w, h);
-  scene_init(&m->scene);
+  scene_init(&m->scene, black);
   client_init(&m->client, servname, port);
   client_connect(&m->client);
   return m;
@@ -49,8 +50,7 @@ static struct color user_color(double* c)
 void milo_clear(milo_t m, double* color)
 {
   scene_destroy(&m->scene);
-  scene_init(&m->scene);
-  cam_clear(&m->camera, user_color(color));
+  scene_init(&m->scene, user_color(color));
 }
 
 void milo_dot(milo_t m, double* point, double* color)
@@ -125,11 +125,6 @@ static void milo_send(milo_t m)
       im->w * im->h * sizeof(struct color));
 }
 
-static void handle_start(void* u)
-{
-  milo_send(u);
-}
-
 static void handle_stop(void* u)
 {
 }
@@ -137,7 +132,6 @@ static void handle_stop(void* u)
 static void handle_zoom(void* u)
 {
   milo_zoom(u, recv_double(milo_socket(u)));
-  milo_send(u);
 }
 
 static void handle_pan(void* u)
@@ -146,28 +140,31 @@ static void handle_pan(void* u)
   x = recv_double(milo_socket(u));
   y = recv_double(milo_socket(u));
   milo_pan(u, x, y);
-  milo_send(u);
-}
-
-static void handle_tilt(void* u)
-{
-  milo_tilt(u, recv_double(milo_socket(u)));
-  milo_send(u);
 }
 
 static void handle_spin(void* u)
 {
   milo_spin(u, recv_double(milo_socket(u)));
+}
+
+static void handle_tilt(void* u)
+{
+  milo_tilt(u, recv_double(milo_socket(u)));
+}
+
+static void handle_render(void* u)
+{
+  milo_render(u);
   milo_send(u);
 }
 
 static handler const handlers[PROTO_CODES] = {
-  handle_start,
   handle_stop,
   handle_zoom,
   handle_pan,
+  handle_spin,
   handle_tilt,
-  handle_spin
+  handle_render
 };
 
 void milo_run(milo_t m)

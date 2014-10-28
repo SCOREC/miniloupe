@@ -14,9 +14,10 @@ enum {
   TYPES
 };
 
-void scene_init(struct scene* s)
+void scene_init(struct scene* s, struct color bg)
 {
   memset(s, 0, sizeof(*s));
+  s->background = bg;
 }
 
 void scene_dot(struct scene* s, struct vec p, struct color c)
@@ -88,6 +89,7 @@ void scene_destroy(struct scene* s)
 void scene_render(struct scene* s, struct cam* cam)
 {
   int i;
+  cam_clear(cam, s->background);
   for (i = 0; i < s->count[DOT]; ++i)
     render_dot(cam, s->dots[i], s->colors[DOT][i]);
   for (i = 0; i < s->count[LINE]; ++i)

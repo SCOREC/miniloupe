@@ -1,4 +1,5 @@
 struct scene {
+  struct color background;
   struct vec* dots;
   struct line* lines;
   struct tri* tris;
@@ -9,7 +10,7 @@ struct scene {
   int cap[4];
 };
 
-void scene_init(struct scene* s);
+void scene_init(struct scene* s, struct color bg);
 void scene_dot(struct scene* s, struct vec p, struct color c);
 void scene_line(struct scene* s, struct line l, struct color c);
 void scene_tri(struct scene* s, struct tri t, struct color c);

@@ -1,5 +1,6 @@
 #include "proto.h"
 #include "socks.h"
+#include "base.h"
 
 static unsigned short endian_canary = 0xFF00;
 

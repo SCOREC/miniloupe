@@ -1,10 +1,10 @@
 enum proto_code {
-  PROTO_START,
   PROTO_STOP,
   PROTO_ZOOM,
   PROTO_PAN,
-  PROTO_TILT,
   PROTO_SPIN,
+  PROTO_TILT,
+  PROTO_RENDER,
   PROTO_CODES
 };
 
