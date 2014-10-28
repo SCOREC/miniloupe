@@ -5,7 +5,6 @@
 #include "render.h"
 #include "scene.h"
 #include "globe.h"
-#include "from_png.h"
 #include "socks.h"
 #include "proto.h"
 
@@ -105,11 +104,6 @@ void milo_render(milo_t m)
 {
   m->camera.frm = globe_frame(&m->globe);
   scene_render(&m->scene, &m->camera);
-}
-
-void milo_write_png(milo_t m, const char* filename)
-{
-  write_png(filename, &m->camera.dr.im);
 }
 
 static int milo_socket(milo_t m)

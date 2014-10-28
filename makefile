@@ -9,9 +9,9 @@ prefix ?= /you-didnt-set-prefix
 all: test view
 
 test: test.o libmilo.a
-	$(CC) -O3 -o $@ $^ $(PNG_LIBS) $(LDLIBS)
+	$(CC) -O3 -o $@ $^ $(LDLIBS)
 
-libmilo.a: milo.o proto.o socks.o scene.o globe.o from_png.o render.o \
+libmilo.a: milo.o proto.o socks.o scene.o globe.o render.o \
   draw_text.o charbits.o image.o space.o base.o
 	ar rcs $@ $^
 
@@ -39,7 +39,7 @@ globe.o: globe.c space.h globe.h
 view.o: view.c socks.h
 	$(CC) $(GTK_CFLAGS) $(CFLAGS) -c $<
 milo.o: milo.c milo.h base.h image.h space.h render.h scene.h globe.h \
- from_png.h
+ socks.h proto.h
 socks.o: socks.c socks.h base.h
 proto.o: proto.c proto.h socks.h
 
