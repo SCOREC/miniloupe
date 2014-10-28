@@ -21,8 +21,10 @@ view: view.o proto.o socks.o base.o
 install: milo.h libmilo.a
 	mkdir -p $(prefix)/include
 	mkdir -p $(prefix)/lib
+	mkdir -p $(prefix)/bin
 	cp milo.h $(prefix)/include
 	cp libmilo.a $(prefix)/lib
+	cp test view $(prefix)/bin
 
 test.o: test.c milo.h
 base.o: base.c base.h
