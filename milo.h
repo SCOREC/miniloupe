@@ -7,6 +7,9 @@ extern "C" {
 
 typedef struct milo* milo_t;
 
+/* points are arrays of 3 doubles (xyz),
+   colors are arrays of 3 doubles (rgb), where each color is from 0 to 1 */
+
 milo_t milo_new(int w, int h, const char* servname, int port);
 void milo_clear(milo_t m, double* color);
 void milo_dot(milo_t m, double* point, double* color);
