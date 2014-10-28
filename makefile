@@ -7,9 +7,12 @@ LDLIBS += -lm
 
 all: test view
 
-test: test.o milo.o proto.o socks.o scene.o globe.o from_png.o render.o \
-  draw_text.o charbits.o image.o space.o base.o
+test: test.o libmilo.a
 	$(CC) -O3 -o $@ $^ $(PNG_LIBS) $(LDLIBS)
+
+libmilo.a: milo.o proto.o socks.o scene.o globe.o from_png.o render.o \
+  draw_text.o charbits.o image.o space.o base.o
+	ar rcs $@ $^
 
 view: view.o proto.o socks.o base.o
 	$(CC) -o $@ $^ $(GTK_LIBS) $(LDLIBS)
