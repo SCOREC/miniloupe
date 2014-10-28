@@ -7,6 +7,7 @@
 #include "globe.h"
 #include "from_png.h"
 #include "socks.h"
+#include "proto.h"
 
 struct milo {
   struct globe globe;
@@ -111,10 +112,65 @@ void milo_write_png(milo_t m, const char* filename)
   write_png(filename, &m->camera.dr.im);
 }
 
-void milo_send(milo_t m)
+static int milo_socket(milo_t m)
+{
+  return m->client.fd;
+}
+
+static void milo_send(milo_t m)
 {
   struct image* im;
   im = &m->camera.dr.im;
   blocking_send(m->client.fd, &im->rows[0][0],
       im->w * im->h * sizeof(struct color));
+}
+
+static void handle_start(void* u)
+{
+  milo_send(u);
+}
+
+static void handle_stop(void* u)
+{
+}
+
+static void handle_zoom(void* u)
+{
+  milo_zoom(u, recv_double(milo_socket(u)));
+  milo_send(u);
+}
+
+static void handle_pan(void* u)
+{
+  double x,y;
+  x = recv_double(milo_socket(u));
+  y = recv_double(milo_socket(u));
+  milo_pan(u, x, y);
+  milo_send(u);
+}
+
+static void handle_tilt(void* u)
+{
+  milo_tilt(u, recv_double(milo_socket(u)));
+  milo_send(u);
+}
+
+static void handle_spin(void* u)
+{
+  milo_spin(u, recv_double(milo_socket(u)));
+  milo_send(u);
+}
+
+static handler const handlers[PROTO_CODES] = {
+  handle_start,
+  handle_stop,
+  handle_zoom,
+  handle_pan,
+  handle_tilt,
+  handle_spin
+};
+
+void milo_run(milo_t m)
+{
+  proto_main(milo_socket(m), handlers, m);
 }

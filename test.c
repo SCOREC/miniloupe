@@ -36,8 +36,7 @@ int main(int argc, char** argv)
   draw_quad(m);
   milo_text(m, text_point, "BossMan", red);
   milo_render(m);
-/*milo_write_png(m, "test.png");*/
-  milo_send(m);
+  milo_run(m);
   milo_free(m);
   return 0;
 }

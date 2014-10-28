@@ -7,11 +7,11 @@ LDLIBS += -lm
 
 all: test view server client
 
-test: test.o milo.o socks.o scene.o globe.o from_png.o render.o draw_text.o charbits.o \
-  image.o space.o base.o
+test: test.o milo.o proto.o socks.o scene.o globe.o from_png.o render.o \
+  draw_text.o charbits.o image.o space.o base.o
 	$(CC) -O3 -o $@ $^ $(PNG_LIBS) $(LDLIBS)
 
-view: view.o socks.o base.o
+view: view.o proto.o socks.o base.o
 	$(CC) -o $@ $^ $(GTK_LIBS) $(LDLIBS)
 
 server: server.o socks.o base.o
@@ -34,6 +34,7 @@ milo.o: milo.c milo.h base.h image.h space.h render.h scene.h globe.h \
 socks.o: socks.c socks.h base.h
 server.o: server.c socks.h
 client.o: client.c socks.h
+proto.o: proto.c proto.h socks.h
 
 clean:
 	git clean -fdx

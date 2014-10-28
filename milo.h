@@ -20,7 +20,7 @@ void milo_tilt(milo_t m, double radians);
 void milo_spin(milo_t m, double radians);
 void milo_render(milo_t m);
 void milo_write_png(milo_t m, const char* filename);
-void milo_send(milo_t m);
+void milo_run(milo_t m);
 void milo_free(milo_t m);
 
 #ifdef __cplusplus

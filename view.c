@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "socks.h"
+#include "proto.h"
 
 static struct server serv;
 static GtkWidget* image;
@@ -13,12 +14,14 @@ unsigned char pixels[PIX_BYTES];
 
 static void close_window(GtkWidget* widget, gpointer data)
 {
+  send_code(serv.fd, PROTO_STOP);
   gtk_main_quit();
 }
 
 static void click(GtkWidget* widget, gpointer data)
 {
   server_accept(&serv);
+  send_code(serv.fd, PROTO_START);
   blocking_recv(serv.fd, pixels, PIX_BYTES);
   gtk_image_set_from_pixbuf(GTK_IMAGE(image), pixbuf);
 }
