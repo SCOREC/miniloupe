@@ -89,6 +89,7 @@ int main(int argc, char** argv)
   GtkWidget* vbox;
   GtkWidget* event_box;
   if (argc != 2) {
+    printf("usage: %s port\n",argv[0]);
     return 0;
   }
   server_init(&serv, atoi(argv[1]));
