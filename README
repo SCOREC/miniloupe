@@ -1,0 +1,26 @@
+Miniloupe is a silly name for a standalone rendering library.
+It consists of a backend called libmilo.a and a frontend called view
+which communicate through a socket.
+The API for rendering using libmilo is in milo.h.
+The backend does not depend on any graphics hardware or software,
+it just uses libpng to dump images for convenience.
+The frontend uses GTK+ 2.0 to hold its GUI together.
+
+This project has two dependencies: libpng and GTK+ 2.0
+It finds them through pkg-config by default, edit the makefile
+if this doesn't work out.
+
+To build and try whats currently there, just type
+	make
+You should now have programs "test" and "view".
+The viewer should be run as follows, given a port
+number on which it will listen (pick a random high number):
+	./view 4242
+The test program should then be run given the
+hostname and port number where the viewer is running:
+	./test localhost 4242
+Then you should be able to click the "accept" button
+in the view program and a test image will show up.
+
+To install the programs, library, and header file, run
+	make install prefix=/path/to/install/dir/
