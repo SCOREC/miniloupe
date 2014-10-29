@@ -1,4 +1,5 @@
-CFLAGS = -Wall -Wshadow -Werror -Wfatal-errors -Wpedantic -g -O3
+CFLAGS = -Wall -Wshadow -Werror -Wfatal-errors -Wpedantic -g -O3 -fPIC
+LDFLAGS = -O3 -fPIC
 PNG_CFLAGS = $(shell pkg-config --cflags libpng)
 PNG_LIBS = $(shell pkg-config --libs libpng)
 GTK_CFLAGS = $(shell pkg-config --cflags gtk+-2.0)
@@ -9,14 +10,14 @@ prefix ?= /you-didnt-set-prefix
 all: test view
 
 test: test.o libmilo.a
-	$(CC) -O3 -o $@ $^ $(LDLIBS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 libmilo.a: milo.o proto.o socks.o scene.o globe.o render.o \
   draw_text.o charbits.o image.o space.o base.o
 	ar rcs $@ $^
 
 view: view.o proto.o socks.o base.o
-	$(CC) -o $@ $^ $(GTK_LIBS) $(LDLIBS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(GTK_LIBS) $(LDLIBS)
 
 install: milo.h libmilo.a
 	mkdir -p $(prefix)/include
