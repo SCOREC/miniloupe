@@ -3,6 +3,9 @@
 #include "render.h"
 #include "base.h"
 
+static double const dot_z_offset = -2.0;
+static double const line_z_offset = -1.0;
+
 void cam_init(struct cam* cam, int w, int h)
 {
   drawing_init(&cam->dr, w, h);
@@ -64,11 +67,14 @@ static struct dot make_dot(struct vec p)
 
 void render_dot(struct cam* cam, struct vec p, struct color c)
 {
+  struct dot d;
   p = frame_mul_vec(cam->frm, p);
   if (!cam_sees(cam, p))
     return;
   p = vec_add(midpoint(cam), p);
-  draw_dot(&cam->dr, make_dot(p), c);
+  d = make_dot(p);
+  d.z += dot_z_offset;
+  draw_dot(&cam->dr, d, c);
 }
 
 void render_line(struct cam* cam, struct line l, struct color c)
@@ -83,7 +89,9 @@ void render_line(struct cam* cam, struct line l, struct color c)
   l.a = vec_add(midpoint(cam), l.a);
   l.b = vec_add(midpoint(cam), l.b);
   dl.a = make_dot(l.a);
+  dl.a.z += line_z_offset;
   dl.b = make_dot(l.b);
+  dl.b.z += line_z_offset;
   draw_line(&cam->dr, dl, c);
 }
 
