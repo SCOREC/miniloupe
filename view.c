@@ -52,8 +52,13 @@ static gboolean pressed(GtkWidget* w, GdkEventButton* event, gpointer u)
   if (state != IDLE) {
     return FALSE;
   }
-  if (event->button == RIGHT_BUTTON) {
-    state = ZOOM;
+  switch (event->button) {
+    case RIGHT_BUTTON:
+      state = ZOOM;
+      break;
+    case MIDDLE_BUTTON:
+      state = PAN;
+      break;
   }
   old_x = event->x;
   old_y = event->y;
@@ -63,15 +68,22 @@ static gboolean pressed(GtkWidget* w, GdkEventButton* event, gpointer u)
 static gboolean released(GtkWidget* w, GdkEventButton* event, gpointer u)
 {
   double dx, dy;
-  if (state == IDLE) {
-    return FALSE;
-  }
   dx = event->x - old_x;
   dy = event->y - old_y;
-  if (state == ZOOM) {
-    send_code(serv.fd, PROTO_ZOOM);
-    send_double(serv.fd, dy);
-    (void)dx;
+  switch (state) {
+    case IDLE:
+      return FALSE;
+    case ZOOM:
+      send_code(serv.fd, PROTO_ZOOM);
+      send_double(serv.fd, dy);
+      break;
+    case PAN:
+      send_code(serv.fd, PROTO_PAN);
+      send_double(serv.fd, dx);
+      send_double(serv.fd, dy);
+      break;
+    case SPIN_TILT:
+      break;
   }
   old_x = event->x;
   old_y = event->y;
