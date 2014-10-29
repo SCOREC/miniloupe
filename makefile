@@ -1,4 +1,5 @@
-CFLAGS = -Wall -Wshadow -Werror -Wfatal-errors -Wpedantic -g -O3 -fPIC
+MPICC = mpicc
+CFLAGS = -Wall -Wshadow -Werror -Wfatal-errors -g -O3 -fPIC
 LDFLAGS = -O3 -fPIC
 PNG_CFLAGS = $(shell pkg-config --cflags libpng)
 PNG_LIBS = $(shell pkg-config --libs libpng)
@@ -43,6 +44,8 @@ milo.o: milo.c milo.h base.h image.h space.h render.h scene.h globe.h \
  socks.h proto.h
 socks.o: socks.c socks.h base.h
 proto.o: proto.c proto.h socks.h
+from_mpi.o: from_mpi.c from_mpi.h image.h base.h
+	$(MPICC) $(CFLAGS) -c $<
 
 clean:
 	git clean -fdx
