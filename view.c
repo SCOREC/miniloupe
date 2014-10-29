@@ -63,7 +63,6 @@ static gboolean pressed(GtkWidget* w, GdkEventButton* event, gpointer u)
 static gboolean released(GtkWidget* w, GdkEventButton* event, gpointer u)
 {
   double dx, dy;
-  double factor;
   if (state == IDLE) {
     return FALSE;
   }
@@ -71,8 +70,7 @@ static gboolean released(GtkWidget* w, GdkEventButton* event, gpointer u)
   dy = event->y - old_y;
   if (state == ZOOM) {
     send_code(serv.fd, PROTO_ZOOM);
-    factor = 1.0 + dy / HEIGHT;
-    send_double(serv.fd, factor);
+    send_double(serv.fd, dy);
     (void)dx;
   }
   old_x = event->x;

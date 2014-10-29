@@ -127,7 +127,14 @@ static void handle_stop(void* u)
 
 static void handle_zoom(void* u)
 {
-  milo_zoom(u, recv_double(milo_socket(u)));
+  double y_pixels, factor;
+  milo_t m;
+  struct image* im;
+  m = u;
+  im = &m->camera.dr.im;
+  y_pixels = recv_double(milo_socket(u));
+  factor = 1.0 + y_pixels / im->h;
+  milo_zoom(u, factor);
 }
 
 static void handle_pan(void* u)
