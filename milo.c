@@ -176,10 +176,7 @@ static void focus(milo_t m)
   double r;
   struct image* im;
   scene_bounds(&m->scene, &min, &max);
-  debug("min %f %f %f\n",min.x,min.y,min.z);
-  debug("max %f %f %f\n",max.x,max.y,max.z);
   mid = vec_mul_s(vec_add(min,max),1.0/2.0);
-  debug("mid %f %f %f\n",mid.x,mid.y,mid.z);
   scene_center(&m->scene, mid);
   diff = vec_sub(max,min);
   r = MAX(fabs(diff.x),MAX(fabs(diff.y),fabs(diff.z)));
@@ -187,7 +184,6 @@ static void focus(milo_t m)
     r = 1.0;
   im = &m->camera.dr.im;
   r *= MIN(im->w, im->h);
-  debug("setting zoom radius to %f\n",r);
   m->globe.center.z = r;
 }
 
