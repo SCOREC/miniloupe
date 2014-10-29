@@ -147,12 +147,26 @@ static void handle_pan(void* u)
 
 static void handle_spin(void* u)
 {
-  milo_spin(u, recv_double(milo_socket(u)));
+  double x_pixels, radians;
+  milo_t m;
+  struct image* im;
+  m = u;
+  im = &m->camera.dr.im;
+  x_pixels = recv_double(milo_socket(u));
+  radians = - pi * x_pixels / im->w;
+  milo_spin(u, radians);
 }
 
 static void handle_tilt(void* u)
 {
-  milo_tilt(u, recv_double(milo_socket(u)));
+  double y_pixels, radians;
+  milo_t m;
+  struct image* im;
+  m = u;
+  im = &m->camera.dr.im;
+  y_pixels = recv_double(milo_socket(u));
+  radians = pi * y_pixels / im->h;
+  milo_tilt(u, radians);
 }
 
 static void handle_render(void* u)

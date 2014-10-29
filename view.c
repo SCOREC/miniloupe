@@ -53,11 +53,14 @@ static gboolean pressed(GtkWidget* w, GdkEventButton* event, gpointer u)
     return FALSE;
   }
   switch (event->button) {
-    case RIGHT_BUTTON:
-      state = ZOOM;
+    case LEFT_BUTTON:
+      state = SPIN_TILT;
       break;
     case MIDDLE_BUTTON:
       state = PAN;
+      break;
+    case RIGHT_BUTTON:
+      state = ZOOM;
       break;
   }
   old_x = event->x;
@@ -83,10 +86,12 @@ static gboolean released(GtkWidget* w, GdkEventButton* event, gpointer u)
       send_double(serv.fd, dy);
       break;
     case SPIN_TILT:
+      send_code(serv.fd, PROTO_SPIN);
+      send_double(serv.fd, dx);
+      send_code(serv.fd, PROTO_TILT);
+      send_double(serv.fd, dy);
       break;
   }
-  old_x = event->x;
-  old_y = event->y;
   state = IDLE;
   render();
   return FALSE;
