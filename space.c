@@ -64,6 +64,20 @@ struct vec vec_norm(struct vec v)
   return vec_mul_s(v, 1.0 /  vec_mag(v));
 }
 
+struct vec vec_max(struct vec a, struct vec b)
+{
+  return vec_new(MAX(a.x, b.x),
+                 MAX(a.y, b.y),
+                 MAX(a.z, b.z));
+}
+
+struct vec vec_min(struct vec a, struct vec b)
+{
+  return vec_new(MIN(a.x, b.x),
+                 MIN(a.y, b.y),
+                 MIN(a.z, b.z));
+}
+
 struct mat mat_new(struct vec x, struct vec y, struct vec z)
 {
   struct mat m;

@@ -17,3 +17,5 @@ void scene_tri(struct scene* s, struct tri t, struct color c);
 void scene_text(struct scene* s, struct vec p, const char* t, struct color c);
 void scene_destroy(struct scene* s);
 void scene_render(struct scene* s, struct cam* cam);
+void scene_bounds(struct scene* s, struct vec* min, struct vec* max);
+void scene_center(struct scene* s, struct vec c);

@@ -8,6 +8,8 @@
 #include "socks.h"
 #include "proto.h"
 
+#include <math.h>
+
 struct milo {
   struct globe globe;
   struct cam camera;
@@ -161,7 +163,29 @@ static handler const handlers[PROTO_CODES] = {
   handle_render
 };
 
+static void focus(milo_t m)
+{
+  struct vec min,max,mid,diff;
+  double r;
+  struct image* im;
+  scene_bounds(&m->scene, &min, &max);
+  debug("min %f %f %f\n",min.x,min.y,min.z);
+  debug("max %f %f %f\n",max.x,max.y,max.z);
+  mid = vec_mul_s(vec_add(min,max),1.0/2.0);
+  debug("mid %f %f %f\n",mid.x,mid.y,mid.z);
+  scene_center(&m->scene, mid);
+  diff = vec_sub(max,min);
+  r = MAX(fabs(diff.x),MAX(fabs(diff.y),fabs(diff.z)));
+  if (!r)
+    r = 1.0;
+  im = &m->camera.dr.im;
+  r *= MIN(im->w, im->h);
+  debug("setting zoom radius to %f\n",r);
+  m->globe.center.z = r;
+}
+
 void milo_run(milo_t m)
 {
+  focus(m);
   proto_main(milo_socket(m), handlers, m);
 }

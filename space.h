@@ -24,6 +24,8 @@ struct vec vec_mul_s(struct vec v, double s);
 double vec_mag(struct vec v);
 struct vec vec_norm(struct vec v);
 struct vec vec_new(double x, double y, double z);
+struct vec vec_max(struct vec a, struct vec b);
+struct vec vec_min(struct vec a, struct vec b);
 
 struct mat mat_rot(struct vec u, double t);
 

@@ -90,13 +90,63 @@ void scene_render(struct scene* s, struct cam* cam)
 {
   int i;
   cam_clear(cam, s->background);
-  for (i = 0; i < s->count[DOT]; ++i)
+  for (i = 0; i < s->count[DOT]; ++i) {
     render_dot(cam, s->dots[i], s->colors[DOT][i]);
-  for (i = 0; i < s->count[LINE]; ++i)
+  }
+  for (i = 0; i < s->count[LINE]; ++i) {
     render_line(cam, s->lines[i], s->colors[LINE][i]);
-  for (i = 0; i < s->count[TRI]; ++i)
+  }
+  for (i = 0; i < s->count[TRI]; ++i) {
     render_tri(cam, s->tris[i], s->colors[TRI][i]);
-  for (i = 0; i < s->count[TEXT]; ++i)
+  }
+  for (i = 0; i < s->count[TEXT]; ++i) {
     render_text(cam, s->text_points[i], s->texts[i], s->colors[TEXT][i]);
+  }
 }
 
+static int update_bounds(struct vec* p, int n,
+    struct vec* min, struct vec* max, int init)
+{
+  int i;
+  if (!init && n) {
+    *min = *max = p[0];
+    init = 1;
+  }
+  for (i = 1; i < n; ++i) {
+    *min = vec_min(*min, p[i]);
+    *max = vec_max(*max, p[i]);
+  }
+  return init;
+}
+
+void scene_bounds(struct scene* s, struct vec* min, struct vec* max)
+{
+  int init = 0;
+  init = update_bounds(s->dots, s->count[DOT],
+      min, max, init);
+  init = update_bounds((struct vec*)s->lines, s->count[LINE] * 2,
+      min, max, init);
+  init = update_bounds((struct vec*)s->tris, s->count[TRI] * 3,
+      min, max, init);
+  init = update_bounds(s->text_points, s->count[TEXT],
+      min, max, init);
+  if (!init) {
+    *min = *max = vec_new(0,0,0);
+  }
+}
+
+static void center_points(struct vec* p, int n, struct vec c)
+{
+  int i;
+  for (i = 0; i < n; ++i) {
+    p[i] = vec_sub(p[i], c);
+  }
+}
+
+void scene_center(struct scene* s, struct vec c)
+{
+  center_points(s->dots, s->count[DOT], c);
+  center_points((struct vec*)s->lines, s->count[LINE] * 2, c);
+  center_points((struct vec*)s->tris, s->count[TRI] * 3, c);
+  center_points(s->text_points, s->count[TEXT], c);
+}
