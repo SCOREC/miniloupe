@@ -19,7 +19,7 @@ libmilo.a: milo.o proto.o socks.o scene.o globe.o render.o \
 view: view.o proto.o socks.o base.o
 	$(CC) $(LDFLAGS) -o $@ $^ $(GTK_LIBS) $(LDLIBS)
 
-install: milo.h libmilo.a
+install: milo.h libmilo.a test view
 	mkdir -p $(prefix)/include
 	mkdir -p $(prefix)/lib
 	mkdir -p $(prefix)/bin
@@ -34,7 +34,7 @@ draw_text.o: draw_text.c image.h charbits.h
 from_png.o: from_png.c from_png.h image.h base.h
 	$(CC) $(PNG_CFLAGS) $(CFLAGS) -c $<
 image.o: image.c image.h base.h
-render.o: render.c render.h space.h image.h base.h
+render.o: render.c image.h space.h render.h base.h
 space.o: space.c space.h base.h
 globe.o: globe.c space.h globe.h
 view.o: view.c socks.h
