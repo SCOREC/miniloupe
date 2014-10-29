@@ -173,18 +173,24 @@ static handler const handlers[PROTO_CODES] = {
 static void focus(milo_t m)
 {
   struct vec min,max,mid,diff;
-  double r;
+  double r, zoom;
   struct image* im;
   scene_bounds(&m->scene, &min, &max);
+  debug("min %f %f %f\n",min.x,min.y,min.z);
+  debug("max %f %f %f\n",max.x,max.y,max.z);
   mid = vec_mul_s(vec_add(min,max),1.0/2.0);
+  debug("mid %f %f %f\n",mid.x,mid.y,mid.z);
   scene_center(&m->scene, mid);
   diff = vec_sub(max,min);
+  debug("diff %f %f %f\n",diff.x,diff.y,diff.z);
   r = MAX(fabs(diff.x),MAX(fabs(diff.y),fabs(diff.z)));
+  debug("r %f\n",r);
   if (!r)
     r = 1.0;
   im = &m->camera.dr.im;
-  r *= MIN(im->w, im->h);
-  m->globe.center.z = r;
+  zoom = MIN(im->w, im->h) / r;
+  debug("zoom %f\n",zoom);
+  m->globe.center.z = zoom;
 }
 
 void milo_run(milo_t m)
