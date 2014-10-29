@@ -76,6 +76,23 @@ void draw_dot(struct drawing* dr, struct dot d, struct color c)
   }
 }
 
+void draw_thick_dot(struct drawing* dr, struct dot d, struct color c)
+{
+  static int const thickness = 2;
+  int i,j;
+  struct dot d2;
+  if (((d.p.x + thickness - 1) < dr->im.w) &&
+      ((d.p.y + thickness - 1) < dr->im.h)) {
+    for (i = 0; i < thickness; ++i)
+    for (j = 0; j < thickness; ++j) {
+      d2.p.x = d.p.x + i;
+      d2.p.y = d.p.y + j;
+      d2.z = d.z;
+      draw_dot(dr, d2, c);
+    }
+  }
+}
+
 static int pix_dot(struct pix a, struct pix b)
 {
   return a.x * b.x + a.y * b.y;

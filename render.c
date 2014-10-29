@@ -74,7 +74,7 @@ void render_dot(struct cam* cam, struct vec p, struct color c)
   p = vec_add(midpoint(cam), p);
   d = make_dot(p);
   d.z += dot_z_offset;
-  draw_dot(&cam->dr, d, c);
+  draw_thick_dot(&cam->dr, d, c);
 }
 
 void render_line(struct cam* cam, struct line l, struct color c)

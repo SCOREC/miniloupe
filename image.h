@@ -40,6 +40,7 @@ void drawing_clear(struct drawing* d, struct color c);
 struct pix pix_new(int x, int y);
 
 void draw_dot(struct drawing* dr, struct dot d, struct color c);
+void draw_thick_dot(struct drawing* dr, struct dot d, struct color c);
 void draw_line(struct drawing* dr, struct dline l, struct color c);
 void draw_tri(struct drawing* dr, struct dtri t, struct color c);
 void draw_tri_lines(struct drawing* dr, struct dtri t, struct color c);
