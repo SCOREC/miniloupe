@@ -10,7 +10,7 @@ enum proto_code {
 
 typedef void (*handler)(void* u);
 
-double convertd(double x);
+double convert_double(double x);
 void send_code(int fd, enum proto_code c);
 void send_double(int fd, double x);
 double recv_double(int fd);

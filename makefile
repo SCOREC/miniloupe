@@ -11,13 +11,13 @@ prefix ?= /you-didnt-set-prefix
 all: test view
 
 test: test.o libmilo.a
-	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	$(MPICC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-libmilo.a: milo.o proto.o socks.o scene.o globe.o render.o \
-  draw_text.o charbits.o image.o space.o base.o
+libmilo.a: milo.o proto.o proto_back.o from_mpi.o socks.o scene.o globe.o \
+  render.o draw_text.o charbits.o image.o space.o base.o
 	ar rcs $@ $^
 
-view: view.o proto.o socks.o base.o
+view: view.o proto.o proto_front.o socks.o base.o
 	$(CC) $(LDFLAGS) -o $@ $^ $(GTK_LIBS) $(LDLIBS)
 
 install: milo.h libmilo.a test view
@@ -28,7 +28,7 @@ install: milo.h libmilo.a test view
 	cp libmilo.a $(prefix)/lib
 	cp test view $(prefix)/bin
 
-test.o: test.c milo.h
+test.o: test.c milo.h from_mpi.h
 base.o: base.c base.h
 charbits.o: charbits.c charbits.h
 draw_text.o: draw_text.c image.h charbits.h
@@ -43,7 +43,9 @@ view.o: view.c socks.h
 milo.o: milo.c milo.h base.h image.h space.h render.h scene.h globe.h \
  socks.h proto.h
 socks.o: socks.c socks.h base.h
-proto.o: proto.c proto.h socks.h
+proto.o: proto.c proto.h socks.h from_mpi.h
+proto_front.o: proto_front.c proto.h socks.h
+proto_back.o: proto_back.c proto.h socks.h from_mpi.h
 from_mpi.o: from_mpi.c from_mpi.h image.h base.h
 	$(MPICC) $(CFLAGS) -c $<
 

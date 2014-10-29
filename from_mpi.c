@@ -4,6 +4,16 @@
 #include <mpi.h>
 #include <string.h>
 
+void start_mpi(void)
+{
+  MPI_Init(0,0);
+}
+
+void stop_mpi(void)
+{
+  MPI_Finalize();
+}
+
 int rank_mpi(void)
 {
   int rank;
@@ -16,6 +26,16 @@ int size_mpi(void)
   int size;
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   return size;
+}
+
+void bcast_int(int* x)
+{
+  MPI_Bcast(x, 1, MPI_INT, 0, MPI_COMM_WORLD);
+}
+
+void bcast_double(double* x)
+{
+  MPI_Bcast(x, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 }
 
 static int pixels;

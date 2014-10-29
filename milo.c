@@ -7,6 +7,7 @@
 #include "globe.h"
 #include "socks.h"
 #include "proto.h"
+#include "from_mpi.h"
 
 #include <math.h>
 
@@ -25,8 +26,10 @@ milo_t milo_new(int w, int h, const char* servname, int port)
   m->globe = globe_ident;
   cam_init(&m->camera, w, h);
   scene_init(&m->scene, black);
-  client_init(&m->client, servname, port);
-  client_connect(&m->client);
+  if (!rank_mpi()) {
+    client_init(&m->client, servname, port);
+    client_connect(&m->client);
+  }
   return m;
 }
 
@@ -34,8 +37,10 @@ void milo_free(milo_t m)
 {
   cam_destroy(&m->camera);
   scene_destroy(&m->scene);
-  client_close(&m->client);
-  client_destroy(&m->client);
+  if (!rank_mpi()) {
+    client_close(&m->client);
+    client_destroy(&m->client);
+  }
   FREE(m);
 }
 
@@ -106,6 +111,7 @@ static void milo_render(milo_t m)
 {
   m->camera.frm = globe_frame(&m->globe);
   scene_render(&m->scene, &m->camera);
+  reduce_drawing_mpi(&m->camera.dr);
 }
 
 static int milo_socket(milo_t m)
@@ -172,7 +178,9 @@ static void handle_tilt(void* u)
 static void handle_render(void* u)
 {
   milo_render(u);
-  milo_send(u);
+  if (!rank_mpi()) {
+    milo_send(u);
+  }
 }
 
 static handler const handlers[PROTO_CODES] = {

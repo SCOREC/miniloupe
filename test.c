@@ -1,4 +1,5 @@
 #include "milo.h"
+#include "from_mpi.h"
 
 /* the following two lines bring in M_PI */
 #define _XOPEN_SOURCE 500
@@ -28,6 +29,7 @@ int main(int argc, char** argv)
     printf("usage: %s server port\n", argv[0]);
     return 0;
   }
+  start_mpi();
   m = milo_new(200, 200, argv[1], atoi(argv[2]));
   milo_zoom(m, 40);
   milo_spin(m, -3 * M_PI / 8);
@@ -37,5 +39,6 @@ int main(int argc, char** argv)
   milo_text(m, text_point, "BossMan", red);
   milo_run(m);
   milo_free(m);
+  stop_mpi();
   return 0;
 }
