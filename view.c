@@ -102,6 +102,7 @@ int main(int argc, char** argv)
   GtkWidget* window;
   GtkWidget* button;
   GtkWidget* vbox;
+  GtkWidget* hbox;
   GtkWidget* event_box;
   if (argc != 2) {
     printf("usage: %s port\n",argv[0]);
@@ -123,11 +124,13 @@ int main(int argc, char** argv)
                                    GDK_BUTTON_RELEASE_MASK);
   g_signal_connect(event_box, "button-press-event", G_CALLBACK(pressed), 0);
   g_signal_connect(event_box, "button-release-event", G_CALLBACK(released), 0);
-  vbox = gtk_vbox_new(FALSE, 4);
-  gtk_container_add(GTK_CONTAINER(vbox), button);
+  vbox = gtk_vbox_new(FALSE, 0);
+  hbox = gtk_hbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
   gtk_container_add(GTK_CONTAINER(event_box), image);
-  gtk_container_add(GTK_CONTAINER(vbox), event_box);
-  gtk_container_add(GTK_CONTAINER(window), vbox);
+  gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox), event_box, FALSE, FALSE, 4);
+  gtk_container_add(GTK_CONTAINER(window), hbox);
   gtk_widget_show_all(window);
   gtk_main();
   server_close(&serv);
