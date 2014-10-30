@@ -85,6 +85,13 @@ void client_close(struct client* c)
 
 void blocking_send(int fd, void* data, unsigned size)
 {
+  int err;
+  err = blocking_send_unsafe(fd, data, size);
+  EXCEPT_IF(err);
+}
+
+int blocking_send_unsafe(int fd, void* data, unsigned size)
+{
   char* p;
   ssize_t written;
   p = data;
@@ -94,10 +101,11 @@ void blocking_send(int fd, void* data, unsigned size)
     if (written != -1) {
       size -= written;
       p += written;
-    } else {
-      EXCEPT_IF(errno != EAGAIN);
+    } else if (errno != EAGAIN) {
+      return errno;
     }
   }
+  return 0;
 }
 
 void blocking_recv(int fd, void* data, unsigned size)

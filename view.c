@@ -1,3 +1,6 @@
+#include "base.h"
+/* GTK and I fighting over control of ABS */
+#undef ABS
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,17 +36,37 @@ static void close_window(GtkWidget* widget, gpointer data)
   gtk_main_quit();
 }
 
-static void render(void)
+static int render_unsafe(void)
 {
-  send_code(serv.fd, PROTO_RENDER);
+  int err;
+  err = send_code_unsafe(serv.fd, PROTO_RENDER);
+  if (err)
+    return err;
   blocking_recv(serv.fd, pixels, PIX_BYTES);
   gtk_image_set_from_pixbuf(GTK_IMAGE(image), pixbuf);
+  return 0;
+}
+
+static void render(void)
+{
+  int err;
+  err = render_unsafe();
+  EXCEPT_IF(err);
+}
+
+static void start(void)
+{
+  int err;
+  err = render_unsafe();
+  if (err) {
+    gtk_main_quit();
+  }
 }
 
 static void accepted(GtkWidget* widget, gpointer data)
 {
   server_accept(&serv);
-  render();
+  start();
 }
 
 static gboolean pressed(GtkWidget* w, GdkEventButton* event, gpointer u)
