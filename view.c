@@ -69,6 +69,12 @@ static void accepted(GtkWidget* widget, gpointer data)
   start();
 }
 
+static void continued(GtkWidget* widget, gpointer data)
+{
+  send_code(serv.fd, PROTO_STOP);
+  start();
+}
+
 static gboolean pressed(GtkWidget* w, GdkEventButton* event, gpointer u)
 {
   if (state != IDLE) {
@@ -122,7 +128,8 @@ static gboolean released(GtkWidget* w, GdkEventButton* event, gpointer u)
 int main(int argc, char** argv)
 {
   GtkWidget* window;
-  GtkWidget* button;
+  GtkWidget* accept_button;
+  GtkWidget* continue_button;
   GtkWidget* vbox;
   GtkWidget* hbox;
   GtkWidget* event_box;
@@ -135,8 +142,10 @@ int main(int argc, char** argv)
   gtk_init(&argc, &argv);
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   g_signal_connect(window, "destroy", G_CALLBACK(close_window), NULL);
-  button = gtk_button_new_with_label("accept");
-  g_signal_connect(button, "clicked", G_CALLBACK(accepted), NULL);
+  accept_button = gtk_button_new_with_label("accept");
+  g_signal_connect(accept_button, "clicked", G_CALLBACK(accepted), NULL);
+  continue_button = gtk_button_new_with_label("continue");
+  g_signal_connect(continue_button, "clicked", G_CALLBACK(continued), NULL);
   memset(pixels, 0, PIX_BYTES);
   pixbuf = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB,
       FALSE, 8, WIDTH, HEIGHT, WIDTH * 3, NULL, NULL);
@@ -148,7 +157,8 @@ int main(int argc, char** argv)
   g_signal_connect(event_box, "button-release-event", G_CALLBACK(released), 0);
   vbox = gtk_vbox_new(FALSE, 0);
   hbox = gtk_hbox_new(FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), accept_button, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), continue_button, FALSE, FALSE, 0);
   gtk_container_add(GTK_CONTAINER(event_box), image);
   gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(hbox), event_box, FALSE, FALSE, 4);
@@ -156,7 +166,6 @@ int main(int argc, char** argv)
   gtk_widget_show_all(window);
   gtk_main();
   if (serv.fd != -1) {
-    send_code(serv.fd, PROTO_STOP);
     server_close(&serv);
   }
   return 0;
