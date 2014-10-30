@@ -30,7 +30,6 @@ enum mouse_buttons {
 
 static void close_window(GtkWidget* widget, gpointer data)
 {
-  send_code(serv.fd, PROTO_STOP);
   gtk_main_quit();
 }
 
@@ -133,6 +132,9 @@ int main(int argc, char** argv)
   gtk_container_add(GTK_CONTAINER(window), hbox);
   gtk_widget_show_all(window);
   gtk_main();
-  server_close(&serv);
+  if (serv.fd != -1) {
+    send_code(serv.fd, PROTO_STOP);
+    server_close(&serv);
+  }
   return 0;
 }
