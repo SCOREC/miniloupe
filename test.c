@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     return 0;
   }
   start_mpi();
-  m = milo_new(200, 200, argv[1], atoi(argv[2]));
+  m = milo_new(argv[1], atoi(argv[2]));
   milo_zoom(m, 40);
   milo_spin(m, -3 * M_PI / 8);
   milo_tilt(m, M_PI / 9);

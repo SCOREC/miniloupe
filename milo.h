@@ -7,7 +7,7 @@ extern "C" {
 
 typedef struct milo* milo_t;
 
-milo_t milo_new(int w, int h, const char* servname, int port);
+milo_t milo_new(const char* servname, int port);
 void milo_free(milo_t m);
 
 /* points are arrays of 3 doubles (xyz),

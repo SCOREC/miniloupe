@@ -10,8 +10,8 @@
 static struct server serv;
 static GtkWidget* image;
 static GdkPixbuf* pixbuf;
-#define WIDTH 200
-#define HEIGHT 200
+#define WIDTH 640
+#define HEIGHT 480
 #define PIX_BYTES (WIDTH*HEIGHT*3)
 unsigned char pixels[PIX_BYTES];
 double old_x, old_y;

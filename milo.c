@@ -18,13 +18,13 @@ struct milo {
   struct client client;
 };
 
-milo_t milo_new(int w, int h, const char* servname, int port)
+milo_t milo_new(const char* servname, int port)
 {
   static struct color const black = {0,0,0};
   milo_t m;
   ALLOC(m);
   m->globe = globe_ident;
-  cam_init(&m->camera, w, h);
+  cam_init(&m->camera, 640, 480);
   scene_init(&m->scene, black);
   if (!rank_mpi()) {
     client_init(&m->client, servname, port);
