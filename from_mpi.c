@@ -125,3 +125,20 @@ void reduce_drawing_mpi(struct drawing* d)
   MPI_Op_free(&op);
 }
 
+void max_doubles_mpi(double* x, int n)
+{
+  double* tmp = 0;
+  REALLOC(tmp, n);
+  MPI_Allreduce(x, tmp, n, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+  memcpy(x, tmp, n * sizeof(double));
+  FREE(tmp);
+}
+
+void min_doubles_mpi(double* x, int n)
+{
+  double* tmp = 0;
+  REALLOC(tmp, n);
+  MPI_Allreduce(x, tmp, n, MPI_DOUBLE, MPI_MIN, MPI_COMM_WORLD);
+  memcpy(x, tmp, n * sizeof(double));
+  FREE(tmp);
+}
