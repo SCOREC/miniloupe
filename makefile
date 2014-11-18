@@ -36,6 +36,7 @@ from_png.o: from_png.c from_png.h image.h base.h
 	$(CC) $(PNG_CFLAGS) $(CFLAGS) -c $<
 image.o: image.c image.h base.h
 render.o: render.c image.h space.h render.h base.h
+scene.o: scene.c image.h space.h render.h scene.h base.h
 space.o: space.c space.h base.h
 globe.o: globe.c space.h globe.h
 view.o: view.c socks.h
