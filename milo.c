@@ -64,12 +64,13 @@ void milo_dot(milo_t m, double* point, double* color)
   scene_dot(&m->scene, *((struct vec*)point), user_color(color));
 }
 
-void milo_line(milo_t m, double* point_a, double* point_b, double* color)
+void milo_line(milo_t m, double* point_a, double* point_b, double* color,
+    int is_thick)
 {
   struct line l;
   l.a = *((struct vec*)point_a);
   l.b = *((struct vec*)point_b);
-  scene_line(&m->scene, l, user_color(color));
+  scene_line(&m->scene, l, user_color(color), is_thick);
 }
 
 void milo_triangle(milo_t m, double* point_a, double* point_b, double* point_c,

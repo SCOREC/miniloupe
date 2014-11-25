@@ -15,7 +15,7 @@ void milo_free(milo_t m);
 
 void milo_clear(milo_t m, double* background);
 void milo_dot(milo_t m, double* point, double* color);
-void milo_line(milo_t m, double* point_a, double* point_b, double* color);
+void milo_line(milo_t m, double* point_a, double* point_b, double* color, int is_thick);
 void milo_triangle(milo_t m, double* point_a, double* point_b, double* point_c,
     double* color);
 void milo_text(milo_t m, double* point, const char* text, double* color);

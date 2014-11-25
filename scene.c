@@ -32,15 +32,17 @@ void scene_dot(struct scene* s, struct vec p, struct color c)
   ++(s->count[DOT]);
 }
 
-void scene_line(struct scene* s, struct line l, struct color c)
+void scene_line(struct scene* s, struct line l, struct color c, int is_thick)
 {
   if (s->count[LINE] == s->cap[LINE]) {
     s->cap[LINE] = growth(s->cap[LINE]);
     REALLOC(s->lines, s->cap[LINE]);
     REALLOC(s->colors[LINE], s->cap[LINE]);
+    REALLOC(s->is_thick, s->cap[LINE]);
   }
   s->lines[s->count[LINE]] = l;
   s->colors[LINE][s->count[LINE]] = c;
+  s->is_thick[s->count[LINE]] = is_thick ? 1 : 0;
   ++(s->count[LINE]);
 }
 
@@ -94,7 +96,10 @@ void scene_render(struct scene* s, struct cam* cam)
     render_dot(cam, s->dots[i], s->colors[DOT][i]);
   }
   for (i = 0; i < s->count[LINE]; ++i) {
-    render_line(cam, s->lines[i], s->colors[LINE][i]);
+    if (s->is_thick[i])
+      render_thick_line(cam, s->lines[i], s->colors[LINE][i]);
+    else
+      render_line(cam, s->lines[i], s->colors[LINE][i]);
   }
   for (i = 0; i < s->count[TRI]; ++i) {
     render_tri(cam, s->tris[i], s->colors[TRI][i]);

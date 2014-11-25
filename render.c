@@ -77,7 +77,8 @@ void render_dot(struct cam* cam, struct vec p, struct color c)
   draw_thick_dot(&cam->dr, d, c);
 }
 
-void render_line(struct cam* cam, struct line l, struct color c)
+static void render_line2(struct cam* cam, struct line l, struct color c,
+    void (*linefp)(struct drawing*, struct dline, struct color))
 {
   struct dline dl;
   int i;
@@ -92,7 +93,17 @@ void render_line(struct cam* cam, struct line l, struct color c)
   dl.a.z += line_z_offset;
   dl.b = make_dot(l.b);
   dl.b.z += line_z_offset;
-  draw_line(&cam->dr, dl, c);
+  (*linefp)(&cam->dr, dl, c);
+}
+
+void render_line(struct cam* cam, struct line l, struct color c)
+{
+  render_line2(cam, l, c, draw_line);
+}
+
+void render_thick_line(struct cam* cam, struct line l, struct color c)
+{
+  render_line2(cam, l, c, draw_thick_line);
 }
 
 static void render_tri_leaf(struct cam* cam, struct tri t, struct color c)

@@ -128,7 +128,8 @@ static int pix_eq(struct pix a, struct pix b)
   return a.x == b.x && a.y == b.y;
 }
 
-void draw_line(struct drawing* dr, struct dline l, struct color c)
+static void draw_line2(struct drawing* dr, struct dline l, struct color c,
+    void (*dotfp)(struct drawing*, struct dot, struct color))
 {
   struct pix v, dp;
   double dz;
@@ -152,8 +153,7 @@ void draw_line(struct drawing* dr, struct dline l, struct color c)
     int cdv = pix_dot(pix_sub(dot.p,l.a.p),v);
     /* interpolate z */
     dot.z = l.a.z + (dz*cdv)/vdv;
-    /* interpolate color */
-    draw_dot(dr, dot, c);
+    (*dotfp)(dr, dot, c);
     /* Bresenham stepping rules */
     if (pix_eq(dot.p, l.b.p))
       return;
@@ -167,6 +167,16 @@ void draw_line(struct drawing* dr, struct dline l, struct color c)
       dot.p.y += sy;
     }
   }
+}
+
+void draw_line(struct drawing* dr, struct dline l, struct color c)
+{
+  draw_line2(dr, l, c, draw_dot);
+}
+
+void draw_thick_line(struct drawing* dr, struct dline l, struct color c)
+{
+  draw_line2(dr, l, c, draw_thick_dot);
 }
 
 static struct pix pix_min(struct pix a, struct pix b)
