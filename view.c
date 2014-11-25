@@ -9,6 +9,7 @@
 
 static struct server serv;
 static GtkWidget* image;
+static GtkWidget* text;
 static GdkPixbuf* pixbuf;
 #define WIDTH 640
 #define HEIGHT 480
@@ -36,12 +37,32 @@ static void close_window(GtkWidget* widget, gpointer data)
   gtk_main_quit();
 }
 
+static void set_text(char const* s)
+{
+  GtkTextBuffer* buf;
+  buf = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text));
+  gtk_text_buffer_set_text(buf, s, -1);
+}
+
+static void recv_title(void)
+{
+  int l;
+  char* title;
+  blocking_recv(serv.fd, &l, sizeof(l));
+  title = malloc(l + 1);
+  blocking_recv(serv.fd, title, l);
+  title[l] = '\0';
+  set_text(title);
+  free(title);
+}
+
 static int render_unsafe(void)
 {
   int err;
   err = send_code_unsafe(serv.fd, PROTO_RENDER);
   if (err)
     return err;
+  recv_title();
   blocking_recv(serv.fd, pixels, PIX_BYTES);
   gtk_image_set_from_pixbuf(GTK_IMAGE(image), pixbuf);
   return 0;
@@ -155,10 +176,12 @@ int main(int argc, char** argv)
                                    GDK_BUTTON_RELEASE_MASK);
   g_signal_connect(event_box, "button-press-event", G_CALLBACK(pressed), 0);
   g_signal_connect(event_box, "button-release-event", G_CALLBACK(released), 0);
+  text = gtk_text_view_new();
   vbox = gtk_vbox_new(FALSE, 0);
   hbox = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), accept_button, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), continue_button, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), text, FALSE, FALSE, 10);
   gtk_container_add(GTK_CONTAINER(event_box), image);
   gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(hbox), event_box, FALSE, FALSE, 4);

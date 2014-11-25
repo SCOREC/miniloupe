@@ -10,12 +10,14 @@
 #include "from_mpi.h"
 
 #include <math.h>
+#include <string.h>
 
 struct milo {
   struct globe globe;
   struct cam camera;
   struct scene scene;
   struct client client;
+  char* title;
 };
 
 milo_t milo_new(const char* servname, int port)
@@ -30,6 +32,7 @@ milo_t milo_new(const char* servname, int port)
     client_init(&m->client, servname, port);
     client_connect(&m->client);
   }
+  m->title = 0;
   return m;
 }
 
@@ -41,6 +44,7 @@ void milo_free(milo_t m)
     client_close(&m->client);
     client_destroy(&m->client);
   }
+  FREE(m->title);
   FREE(m);
 }
 
@@ -86,6 +90,11 @@ void milo_triangle(milo_t m, double* point_a, double* point_b, double* point_c,
 void milo_text(milo_t m, double* point, const char* text, double* color)
 {
   scene_text(&m->scene, *((struct vec*)point), text, user_color(color)); 
+}
+
+void milo_title(milo_t m, const char* title)
+{
+  m->title = strdup(title);
 }
 
 void milo_zoom(milo_t m, double factor)
@@ -176,10 +185,19 @@ static void handle_tilt(void* u)
   milo_tilt(u, radians);
 }
 
+static void send_title(milo_t m)
+{
+  int l;
+  l = m->title ? strlen(m->title) : 0;
+  blocking_send(milo_socket(m), &l, sizeof(l));
+  blocking_send(milo_socket(m), m->title, l);
+}
+
 static void handle_render(void* u)
 {
   milo_render(u);
   if (!rank_mpi()) {
+    send_title(u);
     milo_send(u);
   }
 }
