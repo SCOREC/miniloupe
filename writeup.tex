@@ -2,6 +2,7 @@
 \begin{document}
 
 \section{Local Rendering}
+
 Each process gives the renderer a scene
 which is composed of dots, lines, triangles,
 and text.
@@ -32,6 +33,82 @@ the remaining planes.
 We use an orthographic projection as opposed to
 perspective because this is an engineering application
 and avoiding perspective allows us to more easily spot
-regular patterns
+regular patterns (distance between objects is preserved
+regardless of distance to the camera).
+
+After clipping, the objects are handed to special
+raster algorithms.
+Dots are easy, only a depth buffer comparison has
+to be made.
+Lines are turned into a series of dot with the
+Bresenham algorithm.
+The $z$ values over lines are interpolated exactly
+based on the center of the pixel being drawn
+(integer dot products of the pixel center and
+the line vector are used).
+Triangles are rendered by scanning across all pixels
+in the triangle's bounding rectangle, and drawing
+those that are inside the triangle.
+Triangle area coordinates are used, which can be
+integers since only dot products of integer vectors
+are used to compute them.
+Three area coordinates allow us to check which
+pixels are in the triangle and what their $z$
+values should be.
+
+Finally, text is always rendered at distance zero
+with the first character having the anchor point
+aligned with its upper left corner.
+Each character is checked to see if it falls off
+the screen, those that do are skipped.
+To allow shipping the renderer to all architectures,
+we encode a simple bitmap font as a static array in the
+program itself.
+
+\section{Parallel Rendering}
+
+The local rendering process results in a drawing,
+i.e. an RGB image and a depth buffer.
+Two drawings can be combined by comparing the
+respective depth buffer values at each pixel
+and choosing the resulting color based on the
+closes $z$ value.
+This procedure is used to combine the local images
+produced by each process into one final image.
+
+In order to maintain good parallel performance,
+we apply drawing combinations in a binary tree
+fashion to achieve $O(\log n)$ runtime in parallel. 
+This is analogous to how one computes the sum
+of an array through ``divide and conquer" by
+adding the sums of the upper and lower halves
+recursively.
+
+\section{Viewer}
+
+The resulting combined image is then sent
+through network socket to the viewer app,
+which is a separate program that runs on
+a machine with a graphical desktop environment.
+
+The viewer receives frames from the parallel
+process through a socket, displays the image,
+and collects mouse and button inputs from
+the user.
+
+User inputs are transmitted back through the
+socket so that the parallel process can
+adjust its settings, render a new frame,
+and send it forward.
+
+Mouse controls include pan, tilt, spin, and zoom.
+The viewer only transmits mouse movement.
+When the leader of the parallel processes
+receives mouse input through the socket,
+it broadcasts this information to all parallel
+processes, which in turn convert mouse
+actions into affine transforms that are added
+to the existing affine transform that
+defines camera position and orientation.
 
 \end{document}

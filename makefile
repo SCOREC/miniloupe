@@ -50,6 +50,9 @@ proto_back.o: proto_back.c proto.h socks.h from_mpi.h
 from_mpi.o: from_mpi.c from_mpi.h image.h base.h
 	$(MPICC) $(CFLAGS) -c $<
 
+writeup.pdf: writeup.tex
+	pdflatex writeup
+
 clean:
 	git clean -fdx
 
