@@ -1,0 +1,37 @@
+\documentclass{article}
+\begin{document}
+
+\section{Local Rendering}
+Each process gives the renderer a scene
+which is composed of dots, lines, triangles,
+and text.
+Each object in the scene has a color.
+The local scene is rendered onto a drawing,
+which is an RGB image plus a depth buffer
+(also called a $z$-buffer).
+All objects are defined in 3D space, including
+text which has an ``anchor point" int 3D space.
+
+Objects are first transformed into the camera
+frame, which involves scaling, rotating, and
+translating their defining points.
+Once in camera space, objects are clipped by
+four planes defining the viewable area.
+Point clipping is a binary operation: the point
+can either be seen or not.
+Line clipping is fairly straight forward: each
+plane may cut away an invisible portion of the line, what
+remains is the visible portion of the line.
+Triangle clipping is more complex: the visible
+portion after clipping by a plane may be a triangle
+or a quadrilateral.
+If it is a quadrilateral, we represent it with two
+triangles and recursively clip those triangles using
+the remaining planes.
+
+We use an orthographic projection as opposed to
+perspective because this is an engineering application
+and avoiding perspective allows us to more easily spot
+regular patterns
+
+\end{document}
