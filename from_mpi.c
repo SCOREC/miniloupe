@@ -72,7 +72,7 @@ static int drawing_reduce_bytes(void)
 
 static void* alloc_drawing_reduce_buf(void)
 {
-  void* buf = 0;
+  char* buf = 0;
   REALLOC(buf, drawing_reduce_bytes());
   return buf;
 }
