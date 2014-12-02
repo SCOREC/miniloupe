@@ -219,9 +219,9 @@ static void focus(milo_t m)
   scene_bounds(&m->scene, &min, &max);
   min_doubles_mpi(&min.x, 3);
   max_doubles_mpi(&max.x, 3);
-  mid = vec_mul_s(vec_add(min,max),1.0/2.0);
+  mid = vec_mul_s(my_vec_add(min,max),1.0/2.0);
   scene_center(&m->scene, mid);
-  diff = vec_sub(max,min);
+  diff = my_vec_sub(max,min);
   r = MAX(fabs(diff.x),MAX(fabs(diff.y),fabs(diff.z)));
   if (!r)
     r = 1.0;

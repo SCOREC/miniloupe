@@ -144,7 +144,7 @@ static void center_points(struct vec* p, int n, struct vec c)
 {
   int i;
   for (i = 0; i < n; ++i) {
-    p[i] = vec_sub(p[i], c);
+    p[i] = my_vec_sub(p[i], c);
   }
 }
 

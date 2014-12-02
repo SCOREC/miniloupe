@@ -16,7 +16,7 @@ struct frame const frame_ident = {
 
 double const pi = 3.14159265359;
 
-struct vec vec_add(struct vec a, struct vec b)
+struct vec my_vec_add(struct vec a, struct vec b)
 {
   a.x = a.x + b.x;
   a.y = a.y + b.y;
@@ -24,7 +24,7 @@ struct vec vec_add(struct vec a, struct vec b)
   return a;
 }
 
-struct vec vec_sub(struct vec a, struct vec b)
+struct vec my_vec_sub(struct vec a, struct vec b)
 {
   a.x = a.x - b.x;
   a.y = a.y - b.y;
@@ -103,16 +103,16 @@ struct mat mat_mul_s(struct mat m, double s)
 
 struct vec mat_mul_vec(struct mat m, struct vec v)
 {
-  return vec_add(vec_mul_s(m.x, v.x),
-         vec_add(vec_mul_s(m.y, v.y),
+  return my_vec_add(vec_mul_s(m.x, v.x),
+         my_vec_add(vec_mul_s(m.y, v.y),
                  vec_mul_s(m.z, v.z)));
 }
 
 struct mat mat_add(struct mat a, struct mat b)
 {
-  return mat_new(vec_add(a.x, b.x),
-                 vec_add(a.y, b.y),
-                 vec_add(a.z, b.z));
+  return mat_new(my_vec_add(a.x, b.x),
+                 my_vec_add(a.y, b.y),
+                 my_vec_add(a.z, b.z));
 }
 
 struct mat mat_mul_mat(struct mat a, struct mat b)
@@ -173,7 +173,7 @@ struct mat mat_scale(double s)
 
 struct vec frame_mul_vec(struct frame f, struct vec v)
 {
-  return vec_add(mat_mul_vec(f.r, v), f.t);
+  return my_vec_add(mat_mul_vec(f.r, v), f.t);
 }
 
 struct frame frame_new(struct mat r, struct vec t)
@@ -202,7 +202,7 @@ struct frame frame_scale(double s)
 struct frame frame_mul_frame(struct frame a, struct frame b)
 {
   return frame_new(mat_mul_mat(a.r, b.r),
-                   vec_add(mat_mul_vec(a.r, b.t), a.t));
+                   my_vec_add(mat_mul_vec(a.r, b.t), a.t));
 }
 
 struct frame frame_inv(struct frame f)
@@ -213,7 +213,7 @@ struct frame frame_inv(struct frame f)
 
 struct vec tri_norm(struct tri t)
 {
-  return vec_norm(vec_cross(vec_sub(t.b, t.a), vec_sub(t.c, t.a)));
+  return vec_norm(vec_cross(my_vec_sub(t.b, t.a), my_vec_sub(t.c, t.a)));
 }
 
 struct tri frame_mul_tri(struct frame f, struct tri t)
@@ -244,11 +244,11 @@ struct vec plane_line_touch(struct plane pl, struct line l)
      pl.n * (l.a + b * (l.b - l.a)) - pl.r = 0
      pl.n * l.a + b * (pl.n * (l.b - l.a)) = pl.r
      b = (pl.r - pl.n * l.a) / (pl.n * (l.b - l.a)) */
-  v = vec_sub(l.b, l.a);
+  v = my_vec_sub(l.b, l.a);
   denom = vec_dot(pl.n, v);
   EXCEPT_IF(denom == 0.0);
   b = (pl.r - vec_dot(pl.n, l.a)) / denom;
-  return vec_add(l.a, vec_mul_s(v, b));
+  return my_vec_add(l.a, vec_mul_s(v, b));
 }
 
 int plane_clip_line(struct plane pl, struct line* l)

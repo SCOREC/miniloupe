@@ -18,8 +18,8 @@ extern struct mat const mat_ident;
 extern struct frame const frame_ident;
 extern double const pi;
 
-struct vec vec_add(struct vec a, struct vec b);
-struct vec vec_sub(struct vec a, struct vec b);
+struct vec my_vec_add(struct vec a, struct vec b);
+struct vec my_vec_sub(struct vec a, struct vec b);
 struct vec vec_mul_s(struct vec v, double s);
 double vec_mag(struct vec v);
 struct vec vec_norm(struct vec v);

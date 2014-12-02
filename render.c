@@ -71,7 +71,7 @@ void render_dot(struct cam* cam, struct vec p, struct color c)
   p = frame_mul_vec(cam->frm, p);
   if (!cam_sees(cam, p))
     return;
-  p = vec_add(midpoint(cam), p);
+  p = my_vec_add(midpoint(cam), p);
   d = make_dot(p);
   d.z += dot_z_offset;
   draw_thick_dot(&cam->dr, d, c);
@@ -87,8 +87,8 @@ static void render_line2(struct cam* cam, struct line l, struct color c,
   for (i = 0; i < 4; ++i)
     if (!plane_clip_line(clip_plane(cam, i), &l))
       return;
-  l.a = vec_add(midpoint(cam), l.a);
-  l.b = vec_add(midpoint(cam), l.b);
+  l.a = my_vec_add(midpoint(cam), l.a);
+  l.b = my_vec_add(midpoint(cam), l.b);
   dl.a = make_dot(l.a);
   dl.a.z += line_z_offset;
   dl.b = make_dot(l.b);
@@ -109,9 +109,9 @@ void render_thick_line(struct cam* cam, struct line l, struct color c)
 static void render_tri_leaf(struct cam* cam, struct tri t, struct color c)
 {
   struct dtri dt;
-  t.a = vec_add(midpoint(cam), t.a);
-  t.b = vec_add(midpoint(cam), t.b);
-  t.c = vec_add(midpoint(cam), t.c);
+  t.a = my_vec_add(midpoint(cam), t.a);
+  t.b = my_vec_add(midpoint(cam), t.b);
+  t.c = my_vec_add(midpoint(cam), t.c);
   dt.a = make_dot(t.a);
   dt.b = make_dot(t.b);
   dt.c = make_dot(t.c);
@@ -168,6 +168,6 @@ void render_text(struct cam* cam, struct vec p, const char* t,
   p = frame_mul_vec(cam->frm, p);
   if (!cam_sees(cam, p))
     return;
-  p = vec_add(midpoint(cam), p);
+  p = my_vec_add(midpoint(cam), p);
   draw_text(&cam->dr, pix_new(p.x, p.y), t, c);
 }
