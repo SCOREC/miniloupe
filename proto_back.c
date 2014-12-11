@@ -1,6 +1,7 @@
 #include "proto.h"
 #include "socks.h"
 #include "from_mpi.h"
+#include <string.h>
 
 static enum proto_code recv_code(int fd)
 {
