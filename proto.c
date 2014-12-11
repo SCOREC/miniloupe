@@ -47,7 +47,7 @@ static int swap_int(int in)
 int convert_int(int x)
 {
   if (!is_big_endian())
-    return swap_double(x);
+    return swap_int(x);
   else
     return x;
 }
