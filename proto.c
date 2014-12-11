@@ -30,3 +30,24 @@ double convert_double(double x)
   else
     return x;
 }
+
+static int swap_int(int in)
+{
+  unsigned char* p;
+  unsigned char* q;
+  int out;
+  int i;
+  p = (unsigned char*)&in;
+  q = (unsigned char*)&out;
+  for (i = 0; i < sizeof(int); ++i)
+    q[sizeof(int) - i - 1] = p[i];
+  return out;
+}
+
+int convert_int(int x)
+{
+  if (!is_big_endian())
+    return swap_double(x);
+  else
+    return x;
+}

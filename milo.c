@@ -187,17 +187,14 @@ static void handle_tilt(void* u)
 
 static void send_title(milo_t m)
 {
-  int l;
-  l = m->title ? strlen(m->title) : 0;
-  blocking_send(milo_socket(m), &l, sizeof(l));
-  blocking_send(milo_socket(m), m->title, l);
+  send_string(milo_socket(m), m->title);
 }
 
 static void handle_render(void* u)
 {
   milo_render(u);
+  send_title(u);
   if (!rank_mpi()) {
-    send_title(u);
     milo_send(u);
   }
 }

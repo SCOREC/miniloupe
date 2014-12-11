@@ -1,5 +1,6 @@
 #include "proto.h"
 #include "socks.h"
+#include "base.h"
 
 void send_code(int fd, enum proto_code c)
 {
@@ -19,3 +20,20 @@ void send_double(int fd, double x)
   blocking_send(fd, &x, sizeof(x));
 }
 
+int recv_int(int fd)
+{
+  int value;
+  blocking_recv(fd, &value, sizeof(value));
+  return convert_int(value);
+}
+
+char* recv_string(int fd)
+{
+  int l;
+  char* s = 0;
+  l = recv_int(fd);
+  REALLOC(s, l + 1);
+  blocking_recv(fd, s, l);
+  s[l] = '\0';
+  return s;
+}

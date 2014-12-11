@@ -18,6 +18,6 @@ void client_init(struct client* c, const char* servname, int port);
 void client_connect(struct client* c);
 void client_close(struct client* c);
 void client_destroy(struct client* c);
-void blocking_send(int fd, void* data, unsigned size);
-int blocking_send_unsafe(int fd, void* data, unsigned size);
+void blocking_send(int fd, void const* data, unsigned size);
+int blocking_send_unsafe(int fd, void const* data, unsigned size);
 void blocking_recv(int fd, void* data, unsigned size);

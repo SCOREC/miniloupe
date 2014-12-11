@@ -83,16 +83,16 @@ void client_close(struct client* c)
   c->fd = -1;
 }
 
-void blocking_send(int fd, void* data, unsigned size)
+void blocking_send(int fd, void const* data, unsigned size)
 {
   int err;
   err = blocking_send_unsafe(fd, data, size);
   EXCEPT_IF(err);
 }
 
-int blocking_send_unsafe(int fd, void* data, unsigned size)
+int blocking_send_unsafe(int fd, void const* data, unsigned size)
 {
-  char* p;
+  char const* p;
   ssize_t written;
   p = data;
   while (size) {

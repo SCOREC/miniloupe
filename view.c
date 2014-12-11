@@ -46,12 +46,8 @@ static void set_text(char const* s)
 
 static void recv_title(void)
 {
-  int l;
   char* title;
-  blocking_recv(serv.fd, &l, sizeof(l));
-  title = malloc(l + 1);
-  blocking_recv(serv.fd, title, l);
-  title[l] = '\0';
+  title = recv_string(serv.fd);
   set_text(title);
   free(title);
 }
