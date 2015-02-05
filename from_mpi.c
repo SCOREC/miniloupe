@@ -4,9 +4,16 @@
 #include <mpi.h>
 #include <string.h>
 
+static MPI_Comm global_comm = MPI_COMM_WORLD;
+
 void start_mpi(void)
 {
   MPI_Init(0,0);
+}
+
+void localize_mpi(void)
+{
+  global_comm = MPI_COMM_SELF;
 }
 
 void stop_mpi(void)
@@ -17,25 +24,25 @@ void stop_mpi(void)
 int rank_mpi(void)
 {
   int rank;
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  MPI_Comm_rank(global_comm, &rank);
   return rank;
 }
 
 int size_mpi(void)
 {
   int size;
-  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  MPI_Comm_size(global_comm, &size);
   return size;
 }
 
 void bcast_int(int* x)
 {
-  MPI_Bcast(x, 1, MPI_INT, 0, MPI_COMM_WORLD);
+  MPI_Bcast(x, 1, MPI_INT, 0, global_comm);
 }
 
 void bcast_double(double* x)
 {
-  MPI_Bcast(x, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+  MPI_Bcast(x, 1, MPI_DOUBLE, 0, global_comm);
 }
 
 static int pixels;
@@ -116,7 +123,7 @@ void reduce_drawing_mpi(struct drawing* d)
   } else {
     recvbuf = 0;
   }
-  MPI_Reduce(sendbuf, recvbuf, 1, type, op, 0, MPI_COMM_WORLD);
+  MPI_Reduce(sendbuf, recvbuf, 1, type, op, 0, global_comm);
   if (!rank_mpi()) {
     unpack_drawing_reduce(d, recvbuf);
     FREE(recvbuf);
@@ -129,7 +136,7 @@ void max_doubles_mpi(double* x, int n)
 {
   double* tmp = 0;
   REALLOC(tmp, n);
-  MPI_Allreduce(x, tmp, n, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+  MPI_Allreduce(x, tmp, n, MPI_DOUBLE, MPI_MAX, global_comm);
   memcpy(x, tmp, n * sizeof(double));
   FREE(tmp);
 }
@@ -138,7 +145,7 @@ void min_doubles_mpi(double* x, int n)
 {
   double* tmp = 0;
   REALLOC(tmp, n);
-  MPI_Allreduce(x, tmp, n, MPI_DOUBLE, MPI_MIN, MPI_COMM_WORLD);
+  MPI_Allreduce(x, tmp, n, MPI_DOUBLE, MPI_MIN, global_comm);
   memcpy(x, tmp, n * sizeof(double));
   FREE(tmp);
 }

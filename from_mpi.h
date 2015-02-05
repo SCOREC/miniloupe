@@ -1,4 +1,5 @@
 void start_mpi(void);
+void localize_mpi(void);
 void stop_mpi(void);
 int rank_mpi(void);
 int size_mpi(void);

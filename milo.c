@@ -20,12 +20,14 @@ struct milo {
   char* title;
 };
 
-milo_t milo_new(const char* servname, int port)
+milo_t milo_new(const char* servname, int port, int is_local)
 {
   static struct color const black = {0,0,0};
   milo_t m;
   ALLOC(m);
   m->globe = globe_ident;
+  if (is_local)
+    localize_mpi();
   cam_init(&m->camera, 640, 480);
   scene_init(&m->scene, black);
   if (!rank_mpi()) {
